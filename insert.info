@@ -1,0 +1,3 @@
+name = Insert
+description = Assists in inserting files, images, or other media into the body field or other text areas.
+core = 6.x

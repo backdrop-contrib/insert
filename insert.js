@@ -85,6 +85,10 @@ Drupal.behaviors.insert = function(context) {
     else if (typeof(FCKeditorAPI) != 'undefined' && FCKeditorAPI.Instances['edit-body']) {
       FCKeditorAPI.Instances['edit-body'].InsertHtml(content);
     }
+    // Direct CKeditor support (only body field supported).
+    else if (typeof(CKEDITOR) != 'undefined' &&  CKEDITOR.instances['edit-body']) {
+      CKEDITOR.instances['edit-body'].insertHtml(content);
+    }
     else if (insertTextarea) {
       insertAtCursor(insertTextarea, content);
     }

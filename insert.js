@@ -60,12 +60,6 @@ Drupal.behaviors.insert = function(context) {
         content = content.replace(/height[ ]*=[ ]*"?(\d*)"?/i, 'height="' + height + '"');
       }
     }
-    // If no width or height is specified, add a width property but no height.
-    // This lets the browser determine the height upon display.
-    else if (settings.maxWidth && !widthMatches) {
-      content = content.replace(/<img /i, '<img width="' + settings.maxWidth + '" ');
-      content = content.replace(/height[ ]*=[ ]*"?(\d*)"?/i, '');
-    }
 
     // Always work in normal text areas that currently have focus.
     if (insertTextarea && insertTextarea.insertHasFocus) {

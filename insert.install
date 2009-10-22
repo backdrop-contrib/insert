@@ -19,7 +19,7 @@ function insert_install() {
  */
 function insert_enable() {
   // Check if an upgrade from FileField Insert is necessary.
-  if ($filefield_insert_settings = variable_get('filefield_insert_settings', FALSE) && module_exists('content')) {
+  if (($filefield_insert_settings = variable_get('filefield_insert_settings', FALSE)) && module_exists('content')) {
     module_load_include('inc', 'content', 'includes/content.crud');
     foreach ($filefield_insert_settings as $type_name => $type_settings) {
       foreach ($type_settings as $field_name => $settings) {
@@ -43,7 +43,7 @@ function insert_enable() {
   }
 
   if (module_exists('filefield_insert')) {
-    drupal_uninstall_module('filefield_insert');
+    module_disable(array('filefield_insert'));
     drupal_set_message(t('FileField Insert has been disabled. You may safely delete it from your installation.'));
   }
 }

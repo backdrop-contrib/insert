@@ -39,7 +39,9 @@ Drupal.behaviors.insert = function(context) {
     for (var fieldName in settings.fields) {
       var fieldValue = $(settings.fields[fieldName], wrapper).val();
       var fieldRegExp = new RegExp('__' + fieldName + '__', 'g');
-      content = content.replace(fieldRegExp, fieldValue);
+      if (fieldValue) {
+        content = content.replace(fieldRegExp, fieldValue);
+      }
     }
     // Cleanup unused replacements.
     content = content.replace(/__([a-z0-9_]+)__/g, '');

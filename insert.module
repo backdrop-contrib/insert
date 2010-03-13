@@ -58,16 +58,19 @@ function insert_theme() {
     'insert_image' => array(
       'arguments' => array('item' => NULL, 'widget' => NULL),
       'template' => 'templates/insert-image',
+      'file' => 'includes/insert.inc',
     ),
     'insert_link' => array(
       'arguments' => array('item' => NULL, 'widget' => NULL),
       'template' => 'templates/insert-link',
+      'includes/insert.inc',
     ),
 
     // Theme functions in includes/imagecache.inc.
     'imagecache_insert_image' => array(
       'arguments' => array('item' => NULL, 'widget' => NULL, 'preset_name' => NULL),
       'template' => 'templates/imagecache-insert-image',
+      'includes/imagecache.inc',
     ),
   );
 }

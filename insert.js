@@ -61,9 +61,23 @@ Drupal.behaviors.insert = function(context) {
       }
     }
 
+    // Insert the text.
+    Drupal.insert.insertIntoActiveEditor(content);
+  }
+};
+
+// General Insert API functions.
+Drupal.insert = {
+  /**
+   * Insert content into the current (or last active) editor on the page. This
+   * should work with most WYSIWYGs as well as plain textareas.
+   *
+   * @param content
+   */
+  insertIntoActiveEditor: function(content) {
     // Always work in normal text areas that currently have focus.
     if (insertTextarea && insertTextarea.insertHasFocus) {
-      insertAtCursor(insertTextarea, content);
+      Drupal.insert.insertAtCursor(insertTextarea, content);
     }
     // Direct tinyMCE support.
     else if (typeof(tinyMCE) != 'undefined' && tinyMCE.activeEditor) {
@@ -86,13 +100,21 @@ Drupal.behaviors.insert = function(context) {
       CKEDITOR.instances['edit-body'].insertHtml(content);
     }
     else if (insertTextarea) {
-      insertAtCursor(insertTextarea, content);
+      Drupal.insert.insertAtCursor(insertTextarea, content);
     }
 
     return false;
-  }
+  },
 
-  function insertAtCursor(editor, content) {
+  /**
+   * Insert content into a textarea at the current cursor position.
+   *
+   * @param editor
+   *   The DOM object of the textarea that will receive the text.
+   * @param content
+   *   The string to be inserted.
+   */
+  insertAtCursor: function(editor, content) {
     // IE support.
     if (document.selection) {
       editor.focus();
@@ -112,4 +134,4 @@ Drupal.behaviors.insert = function(context) {
       editor.value += content;
     }
   }
-}
+};

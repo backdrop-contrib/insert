@@ -88,15 +88,26 @@ Drupal.insert = {
       Drupal.wysiwyg.instances[Drupal.wysiwyg.activeId].insert(content)
     }
     // FCKeditor module support.
-    else if (typeof(FCKeditorAPI) != 'undefined' && fckActiveId) {
+    else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
       FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
     }
     // Direct FCKeditor support (only body field supported).
-    else if (typeof(FCKeditorAPI) != 'undefined' && FCKeditorAPI.Instances['edit-body']) {
-      FCKeditorAPI.Instances['edit-body'].InsertHtml(content);
+    else if (typeof(FCKeditorAPI) != 'undefined') {
+      // Try inserting into the body.
+      if (FCKeditorAPI.Instances['edit-body']) {
+        FCKeditorAPI.Instances['edit-body'].InsertHtml(content);
+      }
+      // Try inserting into the first instance we find (may occur with very
+      // old versions of FCKeditor).
+      else {
+        for (var n in FCKeditorAPI.Instances) {
+          FCKeditorAPI.Instances[n].InsertHtml(content);
+          break;
+        }
+      }
     }
     // Direct CKeditor support (only body field supported).
-    else if (typeof(CKEDITOR) != 'undefined' &&  CKEDITOR.instances['edit-body']) {
+    else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances['edit-body']) {
       CKEDITOR.instances['edit-body'].insertHtml(content);
     }
     else if (insertTextarea) {

@@ -191,7 +191,7 @@ function insert_process($element) {
   if ($element['fid']['#value']) {
     $insert_styles = array_filter((array) $field['widget']['insert_styles']);
     $default = !empty($field['widget']['insert_default']) ? $field['widget']['insert_default'] : 'auto';
-    if (empty($insert_styles)) {
+    if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
     }
     foreach ($insert_styles as $style_name => $enabled) {
@@ -264,7 +264,7 @@ function insert_widget_form($widget) {
     '#title' => t('Insert'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
-    '#description' => t('These options allow the user to easily insert an &lt;a&gt; or &lt;img&gt; tag into text areas or WYSIWYG editors after uploading a file or image.'),
+    '#description' => t('These options allow the user to easily insert an HTML tags into text areas or WYSIWYG editors after uploading a file or image. The "Automatic" style will insert a &lt;img&gt; tag for images and a &lt;a&gt; tag for other files. Other styles may insert tags that may not match the file type.'),
     '#weight' => 15,
   );
 

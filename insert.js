@@ -1,18 +1,21 @@
 // $Id$
 
+(function ($) {
+
 /**
  * Behavior to add "Insert" buttons.
  */
-Drupal.behaviors.insert = function(context) {
+Drupal.behaviors.insert = {};
+Drupal.behaviors.insert.attach = function(context) {
   if (typeof(insertTextarea) == 'undefined') {
-    insertTextarea = $('#edit-body').get(0) || false;
+    insertTextarea = $('#edit-body textarea.text-full').get(0) || false;
   }
 
   // Keep track of the last active textarea (if not using WYSIWYG).
   $('.node-form textarea:not([name$="[data][title]"])', context).focus(insertSetActive).blur(insertRemoveActive);
 
   // Add the click handler to the insert button.
-  $('.insert-button', context).click(insert);
+  $('.insert-button', context).unbind('click').click(insert);
 
   function insertSetActive() {
     insertTextarea = this;
@@ -94,8 +97,8 @@ Drupal.insert = {
     // Direct FCKeditor support (only body field supported).
     else if (typeof(FCKeditorAPI) != 'undefined') {
       // Try inserting into the body.
-      if (FCKeditorAPI.Instances['edit-body']) {
-        FCKeditorAPI.Instances['edit-body'].InsertHtml(content);
+      if (FCKeditorAPI.Instances[insertTextarea.id]) {
+        FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
       }
       // Try inserting into the first instance we find (may occur with very
       // old versions of FCKeditor).
@@ -107,8 +110,8 @@ Drupal.insert = {
       }
     }
     // Direct CKeditor support (only body field supported).
-    else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances['edit-body']) {
-      CKEDITOR.instances['edit-body'].insertHtml(content);
+    else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
+      CKEDITOR.instances[insertTextarea.id].insertHtml(content);
     }
     else if (insertTextarea) {
       Drupal.insert.insertAtCursor(insertTextarea, content);
@@ -137,7 +140,7 @@ Drupal.insert = {
     else if (editor.selectionStart || editor.selectionStart == '0') {
       var startPos = editor.selectionStart;
       var endPos = editor.selectionEnd;
-      editor.value = editor.value.substring(0, startPos)+ content + editor.value.substring(endPos, editor.value.length);
+      editor.value = editor.value.substring(0, startPos) + content + editor.value.substring(endPos, editor.value.length);
     }
 
     // Fallback, just add to the end of the content.
@@ -146,3 +149,5 @@ Drupal.insert = {
     }
   }
 };
+
+})(jQuery);

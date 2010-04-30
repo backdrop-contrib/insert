@@ -1,3 +1,8 @@
 name = Insert
 description = Assists in inserting files, images, or other media into the body field or other text areas.
-core = 6.x
+core = 7.x
+files[] = insert.module
+files[] = insert.install
+files[] = includes/file.inc
+files[] = includes/image.inc
+files[] = includes/insert.inc

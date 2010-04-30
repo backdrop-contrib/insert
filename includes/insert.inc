@@ -23,18 +23,23 @@ function insert_insert_styles() {
 function insert_insert_content($item, $style, $widget) {
   $style_name = $style['name'];
 
+  if (empty($item['fid'])) {
+    return '';
+  }
+
   if ($style_name == 'auto') {
-    $info = @pathinfo($item['filepath']);
+    $file = file_load($item['fid']);
+    $info = @pathinfo($file->uri);
     if (in_array(strtolower($info['extension']), array('png', 'jpg', 'jpeg', 'gif'))) {
       $style_name = 'image';
     }
   }
 
   if ($style_name == 'image') {
-    return theme('insert_image', $item, $widget);
+    return theme('insert_image', array('item' => $item, 'widget' => $widget));
   }
   else {
-    return theme('insert_link', $item, $widget);
+    return theme('insert_link', array('item' => $item, 'widget' => $widget));
   }
 }
 
@@ -42,9 +47,10 @@ function insert_insert_content($item, $style, $widget) {
  * Preprocess variables for the insert-image.tpl.php file.
  */
 function template_preprocess_insert_image(&$vars) {
-  $vars['url'] = insert_create_url($vars['item']['filepath']);
-  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
-  $image_info = @image_get_info($vars['item']['filepath']);
+  $vars['file'] = file_load($vars['item']['fid']);
+  $vars['url'] = insert_create_url($vars['file']->uri);
+  $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
+  $image_info = @image_get_info($vars['file']->uri);
   $vars['width'] = isset($image_info['width']) ? $image_info['width'] : '';
   $vars['height'] = isset($image_info['height']) ? $image_info['height'] : '';
 }
@@ -53,7 +59,8 @@ function template_preprocess_insert_image(&$vars) {
  * Preprocess variables for the insert-link.tpl.php file.
  */
 function template_preprocess_insert_link(&$vars) {
-  $vars['url'] = insert_create_url($vars['item']['filepath']);
-  $vars['class'] = !empty($vars['widget']['insert_class']) ? $vars['widget']['insert_class'] : '';
-  $vars['name'] = $vars['item']['filename'];
+  $vars['file'] = file_load($vars['item']['fid']);
+  $vars['url'] = insert_create_url($vars['file']->uri);
+  $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
+  $vars['name'] = $vars['file']->filename;
 }

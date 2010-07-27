@@ -106,10 +106,19 @@ function insert_styles($reset = FALSE) {
       $styles = array_merge($styles, $module_styles);
     }
     drupal_alter('insert_styles', $styles);
-    uasort($styles, '_user_sort');
+    uasort($styles, '_insert_style_sort');
   }
 
   return $styles;
+}
+
+/**
+ * Sort the styles.
+ */
+function _insert_style_sort($a, $b) {
+  $a = (array)$a + array('weight' => 0, 'label' => '');
+  $b = (array)$b + array('weight' => 0, 'label' => '');
+  return $a['weight'] < $b['weight'] ? -1 : ($a['weight'] > $b['weight'] ? 1 : strnatcasecmp($a['label'], $b['label']));
 }
 
 /**

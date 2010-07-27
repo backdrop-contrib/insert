@@ -42,7 +42,7 @@ function image_insert_styles() {
  */
 function image_insert_content($item, $style, $widget) {
   $style_name = preg_replace('/^image_/', '', $style['name']);
-  return theme('image_insert_image', array('item' => $item, 'widget' => $widget, 'style_name' => $style_name));
+  return theme(array('image_insert_image__' . str_replace('-', '_', $style_name), 'image_insert_image'), array('item' => $item, 'widget' => $widget, 'style_name' => $style_name));
 }
 
 /**

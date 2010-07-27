@@ -43,6 +43,19 @@ Install
    an "Insert" button will appear. Click this button to send the file or image
    into the Body field.
 
-Insert should would on multiple fields (the last field that was active will
+Insert should work on multiple fields (the last field that was active will
 received the file), and with most popular WYSIWYG editors. Note that FCKeditor
 only supports the Body field due to an API limitation.
+
+Theming
+-------
+
+Insert can be configured to work with non-HTML filters like BBCode or Markdown.
+To do this, copy the template file you would like to change from the "templates"
+directory to your active theme's directory. Then empty your Drupal caches at
+admin/config/development/performance.
+
+The Image templates may also be used per Image style. You can copy the
+image-insert-image.tpl.php file to your theme directory and then rename it to
+image-insert-image--[style-name].tpl.php, where [style-name] is the name of the
+Image style. Change underscores to hyphens in the style name.

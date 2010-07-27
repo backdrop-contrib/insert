@@ -84,26 +84,31 @@ Drupal.insert = {
     }
     // Direct tinyMCE support.
     else if (typeof(tinyMCE) != 'undefined' && tinyMCE.activeEditor) {
+      Drupal.insert.activateTabPane(document.getElementById(tinyMCE.activeEditor.editorId));
       tinyMCE.activeEditor.execCommand('mceInsertContent', false, content);
     }
     // WYSIWYG support, should work in all editors if available.
     else if (Drupal.wysiwyg && Drupal.wysiwyg.activeId) {
+      Drupal.insert.activateTabPane(document.getElementById(Drupal.wysiwyg.activeId));
       Drupal.wysiwyg.instances[Drupal.wysiwyg.activeId].insert(content)
     }
     // FCKeditor module support.
     else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
+      Drupal.insert.activateTabPane(document.getElementById(fckActiveId));
       FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
     }
     // Direct FCKeditor support (only body field supported).
     else if (typeof(FCKeditorAPI) != 'undefined') {
       // Try inserting into the body.
       if (FCKeditorAPI.Instances[insertTextarea.id]) {
+        Drupal.insert.activateTabPane(insertTextarea);
         FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
       }
       // Try inserting into the first instance we find (may occur with very
       // old versions of FCKeditor).
       else {
         for (var n in FCKeditorAPI.Instances) {
+          Drupal.insert.activateTabPane(document.getElementById(n));
           FCKeditorAPI.Instances[n].InsertHtml(content);
           break;
         }
@@ -111,13 +116,31 @@ Drupal.insert = {
     }
     // Direct CKeditor support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
+      Drupal.insert.activateTabPane(insertTextarea);
       CKEDITOR.instances[insertTextarea.id].insertHtml(content);
     }
     else if (insertTextarea) {
+      Drupal.insert.activateTabPane(insertTextarea);
       Drupal.insert.insertAtCursor(insertTextarea, content);
     }
 
     return false;
+  },
+
+  /**
+   * Check for vertical tabs and activate the pane containing the editor.
+   *
+   * @param editor
+   *   The DOM object of the editor that will be checked.
+   */
+  activateTabPane: function(editor) {
+    var $pane = $(editor).parents('.vertical-tabs-pane:first');
+    var $panes = $pane.parent('.vertical-tabs-panes');
+    var $tabs = $panes.parents('.vertical-tabs:first').find('ul.vertical-tabs-list:first li a');
+    if ($pane.size() && $pane.is(':hidden') && $panes.size() && $tabs.size()) {
+      var index = $panes.children().index($pane);
+      $tabs.eq(index).click();
+    }
   },
 
   /**

@@ -152,6 +152,9 @@ Drupal.insert = {
    *   The string to be inserted.
    */
   insertAtCursor: function(editor, content) {
+    // Record the current scroll position.
+    var scroll = editor.scrollTop;
+
     // IE support.
     if (document.selection) {
       editor.focus();
@@ -170,6 +173,9 @@ Drupal.insert = {
     else {
       editor.value += content;
     }
+
+    // Ensure the textarea does not unexpectedly scroll.
+    editor.scrollTop = scroll;
   }
 };
 

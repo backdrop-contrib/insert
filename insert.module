@@ -77,7 +77,7 @@ function insert_theme() {
     'insert_link' => array(
       'variables' => array('item' => NULL, 'widget' => NULL),
       'template' => 'templates/insert-link',
-      'includes/insert.inc',
+      'file' => 'includes/insert.inc',
     ),
 
     // Theme functions in includes/image.inc.
@@ -85,7 +85,7 @@ function insert_theme() {
       'variables' => array('item' => NULL, 'widget' => NULL, 'style_name' => NULL),
       'template' => 'templates/image-insert-image',
       'pattern' => 'imagecache_insert_image__[a-z0-9_]+',
-      'includes/image.inc',
+      'file' => 'includes/image.inc',
     ),
   );
 }

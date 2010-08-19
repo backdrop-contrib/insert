@@ -44,8 +44,20 @@ Install
    into the Body field.
 
 Insert should work on multiple fields (the last field that was active will
-received the file), and with most popular WYSIWYG editors. Note that FCKeditor
+receive the file), and with most popular WYSIWYG editors. Note that FCKeditor
 only supports the Body field due to an API limitation.
+
+Paths
+-----
+
+By default the path to the inserted file will be absolute, including the full
+domain name, such as http://www.example.com/sites/default/files/image.jpg. If
+you prefer relative paths, such as /sites/default/files/image.jpg, add the
+following variable to your settings.php file:
+
+$conf['insert_absolute_paths'] = FALSE;
+
+See http://drupal.org/node/622964#comment-2451810
 
 Theming
 -------

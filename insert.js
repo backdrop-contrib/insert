@@ -114,6 +114,11 @@ Drupal.insert = {
         }
       }
     }
+    // CKeditor module support.
+    else if (typeof(CKEDITOR) != 'undefined' && typeof(Drupal.ckeditorActiveId) != 'undefined') {
+      Drupal.insert.activateTabPane(document.getElementById(Drupal.ckeditorActiveId));
+      CKEDITOR.instances[Drupal.ckeditorActiveId].insertHtml(content);
+    }
     // Direct CKeditor support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
       Drupal.insert.activateTabPane(insertTextarea);

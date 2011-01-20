@@ -156,7 +156,7 @@ function insert_element_process($element) {
   // Bail out early if the needed properties aren't available. This happens
   // most frequently when editing a field configuration.
   if (!isset($element['#entity_type'])) {
-    return;
+    return $element;
   }
 
   $item = $element['#value'];

@@ -225,7 +225,7 @@ function insert_element_process($element) {
 
   if ($element['fid']['#value']) {
     $insert_styles = array_filter((array) $widget_settings['insert_styles']);
-    $default = !empty($instnace['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
+    $default = !empty($instance['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
     }

@@ -13,37 +13,6 @@ require dirname(__FILE__) . '/includes/image.inc';
 require dirname(__FILE__) . '/includes/insert.inc';
 
 /**
- * Implements hook_menu().
- *
- * Insert is dependent on the final image URLs not changing. Because Image
- * module in Drupal core does not require clean URLs, it has to some trickery to
- * swap out the image paths. This implementation of hook_menu() essentially
- * mimics the behavior of ImageCache in Drupal 6, making it so we can use the
- * final URLs directly.
- */
-function insert_menu() {
-  $items = array();
-
-  // Public file directory callback.
-  $public_path = file_default_scheme() .'/styles/%image_style';
-  $items[$public_path] = array(
-    'page callback' => 'image_style_generate',
-    'page arguments' => array(count(explode('/', $public_path)) - 1, 'public'),
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-  // Private downloads callback.
-  $items['system/files/styles/%image_style'] = array(
-    'page callback' => 'image_style_generate',
-    'page arguments' => array(3, 'private'),
-    'access callback' => TRUE,
-    'type' => MENU_CALLBACK
-  );
-
-  return $items;
-}
-
-/**
  * Implements hook_element_info().
  */
 function insert_element_info() {

@@ -216,7 +216,7 @@ function insert_element_process($element) {
       '#type' => 'markup',
       '#options' => $style_options,
       '#widget' => $instance['widget'],
-      '#weight' => -1,
+      '#weight' => -3,
       '#default_value' => $default,
     );
   }

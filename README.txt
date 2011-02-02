@@ -2,8 +2,8 @@
 
 Insert is a utility that makes inserting images and links to files into text
 areas or WYSIWYGs much easier. It adds a simple JavaScript-based button to
-FileField and ImageField widgets. When used with ImageField and ImageCache,
-images may be inserted into text areas with a specific Image style.
+File and Image fields. Images may be inserted into text areas with a specific
+Image style.
 
 Insert was written by Nate Haug.
 

@@ -1,4 +1,3 @@
-// $Id$
 
 Insert is a utility that makes inserting images and links to files into text
 areas or WYSIWYGs much easier. It adds a simple JavaScript-based button to

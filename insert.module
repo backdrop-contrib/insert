@@ -35,6 +35,9 @@ function insert_theme() {
       'render element' => 'element',
       'template' => 'templates/insert-widget',
     ),
+    'insert_field_widget_settings_styles' => array(
+      'render element' => 'element',
+    ),
 
     // Theme functions in includes/insert.inc.
     'insert_image' => array(
@@ -196,7 +199,7 @@ function insert_element_process($element) {
       $item = array_merge((array) file_load($element['fid']['#value']), $item);
     }
 
-    $insert_styles = array_filter((array) $widget_settings['insert_styles']);
+    $insert_styles = !empty($widget_settings['insert_styles']['<all>']) ? drupal_map_assoc(array_keys(insert_styles())) : array_filter((array) $widget_settings['insert_styles']);
     $default = !empty($instance['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
@@ -296,8 +299,10 @@ function insert_field_widget_settings_form($field, $instance) {
     '#title' => t('Enabled insert styles'),
     '#type' => 'checkboxes',
     '#options' => insert_styles_list(),
-    '#default_value' => $settings['insert_styles'],
-    '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed.'),
+    '#default_value' => !empty($settings['insert_styles']['<all>']) ? array_keys(insert_styles_list()) : $settings['insert_styles'],
+    '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed. If all styles are selected, new styles will be enabled by default.'),
+    '#element_validate' => array('insert_field_widget_settings_styles_validate'),
+    '#theme' => 'insert_field_widget_settings_styles',
   );
 
   $form['insert']['insert_default'] = array(
@@ -325,6 +330,35 @@ function insert_field_widget_settings_form($field, $instance) {
   );
 
   return $form;
+}
+
+/**
+ * An #element_validate function for the styles list on the settings form.
+ */
+function insert_field_widget_settings_styles_validate($element, &$form_state) {
+  if (array_values($element['#value']) == array_keys($element['#options'])) {
+    form_set_value($element, array('<all>' => '<all>'), $form_state);
+  }
+}
+
+/**
+ * Theme the output of the styles list on the settings form.
+ */
+function theme_insert_field_widget_settings_styles($variables) {
+  $element = $variables['element'];
+  drupal_add_js('misc/tableselect.js');
+
+  $header = array(
+    array('class' => array('select-all'), 'data' => ' ' . t('Select all')),
+  );
+
+  $rows = array();
+  foreach ($element['#options'] as $key => $label) {
+    $row = array();
+    $row[] = drupal_render($element[$key]);
+    $rows[] = $row;
+  }
+  return theme('table', array('header' => $header, 'rows' => $rows));
 }
 
 /**

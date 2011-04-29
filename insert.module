@@ -52,7 +52,7 @@ function insert_theme() {
     'image_insert_image' => array(
       'variables' => array('item' => NULL, 'widget' => NULL, 'style_name' => NULL),
       'template' => 'templates/image-insert-image',
-      'pattern' => 'imagecache_insert_image__[a-z0-9_]+',
+      'pattern' => 'image_insert_image__[a-z0-9_]+',
       'file' => 'includes/image.inc',
     ),
   );

@@ -166,10 +166,9 @@ function insert_element_process($element) {
   $widget_type = $instance['widget']['type'];
 
   // Bail out of Insert is not enabled on this field.
-  if (!$widget_settings['insert']) {
+  if (empty($widget_settings['insert'])) {
     return $element;
   }
-
 
   // Add base settings only once.
   if (!isset($js_added)) {

@@ -191,6 +191,11 @@ function insert_element_process($element) {
   }
 
   if ($element['fid']['#value']) {
+    // Load the file if it's not entirely loaded.
+    if (!isset($item['filename'])) {
+      $item = array_merge((array) file_load($element['fid']['#value']), $item);
+    }
+
     $insert_styles = array_filter((array) $widget_settings['insert_styles']);
     $default = !empty($instance['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
@@ -203,10 +208,19 @@ function insert_element_process($element) {
           '#value' => insert_content($item, $style, $instance['widget']),
           '#id' => $element['#id'] . '-insert-template-' . str_replace('_', '-', $style_name),
           '#name' => $element['#name'] . '[insert_template][' . $style_name . ']',
-          '#attributes' => array('class' => 'insert-template'),
+          '#attributes' => array('class' => array('insert-template')),
         );
         $style_options[$style_name] = $style['label'];
       }
+
+      // Always provide a file name property.
+      $element['insert_filename'] = array(
+        '#type' => 'hidden',
+        '#value' => $item['filename'],
+        '#id' => $element['#id'] . '-insert-filename',
+        '#name' => $element['#name'] . '[insert_filename]',
+        '#attributes' => array('class' => array('insert-filename')),
+      );
     }
 
     $element['insert'] = array(

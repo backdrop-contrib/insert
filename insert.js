@@ -1,3 +1,7 @@
+/**
+ * @file
+ * JavaScript to activate "Insert" buttons on file and image fields.
+ */
 
 (function ($) {
 
@@ -37,10 +41,17 @@ Drupal.behaviors.insert.attach = function(context) {
     var style = $('.insert-style', wrapper).val();
     var content = $('input.insert-template[name$="[' + style + ']"]', wrapper).val();
     var filename = $('input.insert-filename', wrapper).val();
+    var options = {
+      widgetType: widgetType,
+      filename: filename,
+      style: style,
+      fields: {}
+    };
 
     // Update replacements.
     for (var fieldName in settings.fields) {
       var fieldValue = $(settings.fields[fieldName], wrapper).val();
+      options['fields'][fieldName] = fieldValue;
       if (fieldValue) {
         var fieldRegExp = new RegExp('__' + fieldName + '(_or_filename)?__', 'g');
         content = content.replace(fieldRegExp, fieldValue);
@@ -54,9 +65,6 @@ Drupal.behaviors.insert.attach = function(context) {
     // File name replacement.
     var fieldRegExp = new RegExp('__filename__', 'g');
     content = content.replace(fieldRegExp, filename);
-
-    // Cleanup unused replacements.
-    content = content.replace(/__([a-z0-9_]+)__/g, '');
 
     // Check for a maximum dimension and scale down the width if necessary.
     // This is intended for use with Image Resize Filter.
@@ -72,6 +80,14 @@ Drupal.behaviors.insert.attach = function(context) {
         content = content.replace(/height[ ]*=[ ]*"?(\d*)"?/i, 'height="' + height + '"');
       }
     }
+
+    // Allow other modules to perform replacements.
+    options['content'] = content;
+    $.event.trigger('insertIntoActiveEditor', [options]);
+    content = options['content'];
+
+    // Cleanup unused replacements.
+    content = content.replace(/__([a-z0-9_]+)__/g, '');
 
     // Insert the text.
     Drupal.insert.insertIntoActiveEditor(content);

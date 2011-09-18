@@ -293,6 +293,7 @@ function insert_field_widget_settings_form($field, $instance) {
     '#title' => t('Enable insert button'),
     '#default_value' => $settings['insert'],
     '#description' => t('Enable the insert button and options for this widget.'),
+    '#weight' => -10,
   );
 
   $form['insert']['insert_styles'] = array(
@@ -303,6 +304,7 @@ function insert_field_widget_settings_form($field, $instance) {
     '#description' => t('Select which styles should be available when sending items to text areas. If no styles are selected, the option to use a style is not displayed. If all styles are selected, new styles will be enabled by default.'),
     '#element_validate' => array('insert_field_widget_settings_styles_validate'),
     '#theme' => 'insert_field_widget_settings_styles',
+    '#weight' => 0,
   );
 
   $form['insert']['insert_default'] = array(
@@ -311,6 +313,7 @@ function insert_field_widget_settings_form($field, $instance) {
     '#options' => insert_styles_list(),
     '#default_value' => $settings['insert_default'],
     '#description' => t('Select the default style which will be selected by default or used if no specific styles above are enabled.'),
+    '#weight' => 1,
   );
 
   $form['insert']['insert_class'] = array(
@@ -318,6 +321,7 @@ function insert_field_widget_settings_form($field, $instance) {
     '#type' => 'textfield',
     '#default_value' => $settings['insert_class'],
     '#description' => t('Add any classes that should be added to the item on output.'),
+    '#weight' => 5,
   );
 
   $form['insert']['insert_width'] = array(
@@ -327,6 +331,7 @@ function insert_field_widget_settings_form($field, $instance) {
     '#field_suffix' => ' '. t('pixels'),
     '#default_value' => $settings['insert_width'],
     '#description' => t('When inserting images, the height and width of images may be scaled down to fit within the specified width. Note that this does not resize the image, it only affects the HTML output. To resize images it is recommended to install the <a href="http://drupal.org/project/image_resize_filter">Image Resize Filter</a> module.'),
+    '#weight' => 10,
   );
 
   return $form;

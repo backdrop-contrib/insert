@@ -18,7 +18,7 @@ Drupal.behaviors.insert.attach = function(context) {
   $('textarea:not([name$="[data][title]"])', context).focus(insertSetActive).blur(insertRemoveActive);
 
   // Add the click handler to the insert button.
-  $('.insert-button', context).unbind('click').click(insert);
+  $('.insert-button', context).click(insert);
 
   function insertSetActive() {
     insertTextarea = this;

@@ -15,7 +15,7 @@ Drupal.behaviors.insert.attach = function(context) {
   }
 
   // Keep track of the last active textarea (if not using WYSIWYG).
-  $('.node-form textarea:not([name$="[data][title]"])', context).focus(insertSetActive).blur(insertRemoveActive);
+  $('textarea:not([name$="[data][title]"])', context).focus(insertSetActive).blur(insertRemoveActive);
 
   // Add the click handler to the insert button.
   $('.insert-button', context).unbind('click').click(insert);

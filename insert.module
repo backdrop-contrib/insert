@@ -248,9 +248,12 @@ function insert_element_process($element) {
  * Implements hook_form_alter().
  */
 function insert_form_field_ui_field_edit_form_alter(&$form, $form_state) {
-  if (array_key_exists($form['instance']['widget']['type']['#value'], insert_widgets())) {
+  $instance = $form['#instance'];
+  if (array_key_exists($instance['widget']['type'], insert_widgets())) {
     $field = $form['#field'];
-    $instance = field_info_instance($form['instance']['entity_type']['#value'], $form['instance']['field_name']['#value'], $form['instance']['bundle']['#value']);
+    if (empty($form['instance']['settings'])) {
+      $form['instance']['settings'] = array();
+    }
     $form['instance']['settings'] += insert_field_widget_settings_form($field, $instance);
   }
 }

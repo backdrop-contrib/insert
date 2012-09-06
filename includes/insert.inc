@@ -51,7 +51,8 @@ function insert_insert_content($item, $style, $widget) {
  */
 function template_preprocess_insert_image(&$vars) {
   $vars['file'] = file_load($vars['item']['fid']);
-  $vars['url'] = insert_create_url($vars['file']->uri);
+  $absolute = isset($vars['widget']['settings']['insert_absolute']) ? $vars['widget']['settings']['insert_absolute'] : NULL;
+  $vars['url'] = insert_create_url($vars['file']->uri, $absolute);
   $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
   $image_info = @image_get_info($vars['file']->uri);
   $vars['width'] = isset($image_info['width']) ? $image_info['width'] : '';
@@ -63,7 +64,8 @@ function template_preprocess_insert_image(&$vars) {
  */
 function template_preprocess_insert_link(&$vars) {
   $vars['file'] = file_load($vars['item']['fid']);
-  $vars['url'] = insert_create_url($vars['file']->uri);
+  $absolute = isset($vars['widget']['settings']['insert_absolute']) ? $vars['widget']['settings']['insert_absolute'] : NULL;
+  $vars['url'] = insert_create_url($vars['file']->uri, $absolute);
   $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
   $vars['name'] = $vars['file']->filename;
 }
@@ -73,7 +75,8 @@ function template_preprocess_insert_link(&$vars) {
  */
 function template_preprocess_insert_icon_link(&$vars) {
   $vars['file'] = file_load($vars['item']['fid']);
-  $vars['url'] = insert_create_url($vars['file']->uri);
+  $absolute = isset($vars['widget']['settings']['insert_absolute']) ? $vars['widget']['settings']['insert_absolute'] : NULL;
+  $vars['url'] = insert_create_url($vars['file']->uri, $absolute);
   $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
   $vars['name'] = $vars['file']->filename;
   $vars['type'] = $vars['file']->filemime .'; length='. $vars['file']->filesize;

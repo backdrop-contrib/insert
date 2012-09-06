@@ -263,6 +263,7 @@ function insert_form_field_ui_field_edit_form_alter(&$form, $form_state) {
 function insert_field_widget_info_alter(&$info) {
   $settings = array(
     'insert' => 0,
+    'insert_absolute' => variable_get('insert_absolute_paths', FALSE),
     'insert_styles' => array('auto'),
     'insert_default' => array('auto'),
     'insert_class' => '',
@@ -299,6 +300,14 @@ function insert_field_widget_settings_form($field, $instance) {
     '#default_value' => $settings['insert'],
     '#description' => t('Enable the insert button and options for this widget.'),
     '#weight' => -10,
+  );
+
+  $form['insert']['insert_absolute'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use absolute paths'),
+    '#default_value' => isset($settings['insert_absolute']) ? $settings['insert_absolute'] : variable_get('insert_absolute_paths', FALSE),
+    '#description' => t('Includes the full URL prefix "@base_url" in all links and image tags.', array('@base_url' => $GLOBALS['base_url'])),
+    '#weight' => -9,
   );
 
   $form['insert']['insert_styles'] = array(
@@ -378,13 +387,8 @@ function theme_insert_field_widget_settings_styles($variables) {
  * will consistently use absolute or relative URLs, depending on the Insert
  * setting.
  */
-function insert_create_url($uri) {
-  // This variable has no configuration location. It may be set by placing
-  // $conf['insert_absolute_paths'] = FALSE;
-  // in the site settings.php file, or by manually running variable_set().
-  // For reasons why this might not do what you want and why there's no UI
-  // see http://drupal.org/node/640352.
-  $absolute = variable_get('insert_absolute_paths', TRUE);
+function insert_create_url($uri, $absolute = NULL) {
+  $absolute = isset($absolute) ? $absolute : variable_get('insert_absolute_paths', FALSE);
   $url = file_create_url($uri);
   if (!$absolute && strpos($url, $GLOBALS['base_url']) === 0) {
     $url = base_path() . ltrim(str_replace($GLOBALS['base_url'], '', $url), '/');

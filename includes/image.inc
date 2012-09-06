@@ -57,6 +57,7 @@ function template_preprocess_image_insert_image(&$vars) {
   image_style_transform_dimensions($vars['style_name'], $vars);
 
   $vars['uri'] = image_style_path($vars['style_name'], $vars['file']->uri);
-  $vars['url'] = insert_create_url($vars['uri']);
+  $absolute = isset($vars['widget']['settings']['insert_absolute']) ? $vars['widget']['settings']['insert_absolute'] : NULL;
+  $vars['url'] = insert_create_url($vars['uri'], $absolute);
   $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';
 }

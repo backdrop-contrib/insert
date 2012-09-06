@@ -385,10 +385,12 @@ function insert_create_url($uri) {
   // For reasons why this might not do what you want and why there's no UI
   // see http://drupal.org/node/640352.
   $absolute = variable_get('insert_absolute_paths', TRUE);
-
-  // TODO: Rewrite this function to support relative paths? Tricky because
-  // not all stream wrappers support local paths at all.
-  return file_create_url($uri);
+  $url = file_create_url($uri);
+  $absolute = FALSE;
+  if (!$absolute && strpos($url, $GLOBALS['base_url']) === 0) {
+    $url = base_path() . ltrim(str_replace($GLOBALS['base_url'], '', $url), '/');
+  }
+  return $url;
 }
 
 /**

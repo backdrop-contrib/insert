@@ -51,6 +51,14 @@ Drupal.behaviors.insert.attach = function(context) {
     // Update replacements.
     for (var fieldName in settings.fields) {
       var fieldValue = $(settings.fields[fieldName], wrapper).val();
+      if (fieldValue) {
+        fieldValue = fieldValue
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
       options['fields'][fieldName] = fieldValue;
       if (fieldValue) {
         var fieldRegExp = new RegExp('__' + fieldName + '(_or_filename)?__', 'g');

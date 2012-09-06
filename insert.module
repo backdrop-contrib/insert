@@ -50,6 +50,11 @@ function insert_theme() {
       'template' => 'templates/insert-link',
       'file' => 'includes/insert.inc',
     ),
+    'insert_icon_link' => array(
+      'variables' => array('item' => NULL, 'widget' => NULL),
+      'template' => 'templates/insert-icon-link',
+      'file' => 'includes/insert.inc',
+    ),
 
     // Theme functions in includes/image.inc.
     'image_insert_image' => array(

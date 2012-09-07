@@ -392,9 +392,20 @@ function theme_insert_field_widget_settings_styles($variables) {
  * will consistently use absolute or relative URLs, depending on the Insert
  * setting.
  */
-function insert_create_url($uri, $absolute = NULL) {
+function insert_create_url($uri, $absolute = NULL, $clean_urls = TRUE) {
   $absolute = isset($absolute) ? $absolute : variable_get('insert_absolute_paths', FALSE);
-  $url = file_create_url($uri);
+
+  // If not using clean URLs, the image derivative callback is only available
+  // with the query string. Always use the non-clean URL in the event that the
+  // image cache is flushed and needs to be regenerated. See image_style_url().
+  if (!$clean_urls && file_uri_scheme($uri) == 'public') {
+    $directory_path = file_stream_wrapper_get_instance_by_uri($uri)->getDirectoryPath();
+    $url = url($directory_path . '/' . file_uri_target($uri), array('absolute' => TRUE));
+  }
+  else {
+    $url = file_create_url($uri);
+  }
+
   if (!$absolute && strpos($url, $GLOBALS['base_url']) === 0) {
     $url = base_path() . ltrim(str_replace($GLOBALS['base_url'], '', $url), '/');
   }

@@ -198,12 +198,14 @@ function insert_element_process($element) {
     drupal_add_js(array('insert' => array('widgets' => array($widget_type => $insert_settings))), 'setting');
   }
 
-  if ($element['fid']['#value']) {
-    // Load the file if it's not entirely loaded.
-    if (!isset($item['filename'])) {
-      $item = array_merge((array) file_load($element['fid']['#value']), $item);
+  // Load the file if it's not entirely loaded.
+  if ($element['fid']['#value'] && !isset($item['filename'])) {
+    if ($loaded_file = file_load($element['fid']['#value'])) {
+      $item = array_merge((array) $loaded_file, $item);
     }
+  }
 
+  if (isset($item['filename'])) {
     $insert_styles = !empty($widget_settings['insert_styles']['<all>']) ? drupal_map_assoc(array_keys(insert_styles())) : array_filter((array) $widget_settings['insert_styles']);
     $default = !empty($instance['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {

@@ -116,37 +116,45 @@ Drupal.insert = {
    * @param content
    */
   insertIntoActiveEditor: function(content) {
+    var editorElement;
+
     // Always work in normal text areas that currently have focus.
     if (insertTextarea && insertTextarea.insertHasFocus) {
+      editorElement = insertTextarea;
       Drupal.insert.insertAtCursor(insertTextarea, content);
     }
     // Direct tinyMCE support.
     else if (typeof(tinyMCE) != 'undefined' && tinyMCE.activeEditor) {
-      Drupal.insert.activateTabPane(document.getElementById(tinyMCE.activeEditor.editorId));
+      editorElement = document.getElementById(tinyMCE.activeEditor.editorId);
+      Drupal.insert.activateTabPane(editorElement);
       tinyMCE.activeEditor.execCommand('mceInsertContent', false, content);
     }
     // WYSIWYG support, should work in all editors if available.
     else if (Drupal.wysiwyg && Drupal.wysiwyg.activeId) {
-      Drupal.insert.activateTabPane(document.getElementById(Drupal.wysiwyg.activeId));
+      editorElement = document.getElementById(Drupal.wysiwyg.activeId);
+      Drupal.insert.activateTabPane(editorElement);
       Drupal.wysiwyg.instances[Drupal.wysiwyg.activeId].insert(content)
     }
     // FCKeditor module support.
     else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
-      Drupal.insert.activateTabPane(document.getElementById(fckActiveId));
+      editorElement = document.getElementById(fckActiveId);
+      Drupal.insert.activateTabPane(editorElement);
       FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
     }
     // Direct FCKeditor support (only body field supported).
     else if (typeof(FCKeditorAPI) != 'undefined') {
       // Try inserting into the body.
       if (FCKeditorAPI.Instances[insertTextarea.id]) {
-        Drupal.insert.activateTabPane(insertTextarea);
+        editorElement = insertTextarea;
+        Drupal.insert.activateTabPane(editorElement);
         FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
       }
       // Try inserting into the first instance we find (may occur with very
       // old versions of FCKeditor).
       else {
         for (var n in FCKeditorAPI.Instances) {
-          Drupal.insert.activateTabPane(document.getElementById(n));
+          editorElement = document.getElementById(n);
+          Drupal.insert.activateTabPane(editorElement);
           FCKeditorAPI.Instances[n].InsertHtml(content);
           break;
         }
@@ -154,17 +162,24 @@ Drupal.insert = {
     }
     // CKeditor module support.
     else if (typeof(CKEDITOR) != 'undefined' && typeof(Drupal.ckeditorActiveId) != 'undefined') {
-      Drupal.insert.activateTabPane(document.getElementById(Drupal.ckeditorActiveId));
+      editorElement = document.getElementById(Drupal.ckeditorActiveId);
+      Drupal.insert.activateTabPane(editorElement);
       CKEDITOR.instances[Drupal.ckeditorActiveId].insertHtml(content);
     }
     // Direct CKeditor support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
-      Drupal.insert.activateTabPane(insertTextarea);
+      editorElement = insertTextarea;
+      Drupal.insert.activateTabPane(editorElement);
       CKEDITOR.instances[insertTextarea.id].insertHtml(content);
     }
     else if (insertTextarea) {
-      Drupal.insert.activateTabPane(insertTextarea);
+      editorElement = insertTextarea;
+      Drupal.insert.activateTabPane(editorElement);
       Drupal.insert.insertAtCursor(insertTextarea, content);
+    }
+
+    if (editorElement) {
+      Drupal.insert.contentWarning(editorElement, content);
     }
 
     return false;
@@ -184,6 +199,27 @@ Drupal.insert = {
       var index = $panes.children().index($pane);
       $tabs.eq(index).click();
     }
+  },
+
+  /**
+   * Warn users when attempting to insert an image into an unsupported field.
+   *
+   * This function is only a 90% use-case, as it doesn't support when the filter
+   * tip are hidden, themed, or when only one format is available. However it
+   * should fail silently in these situations.
+   */
+  contentWarning: function(editorElement, content) {
+    if (!content.match(/<img /)) return;
+
+    var $wrapper = $(editorElement).parents('div.text-format-wrapper:first');
+    if (!$wrapper.length) return;
+
+    $wrapper.find('.filter-guidelines-item:visible li').each(function(index, element) {
+      var expression = new RegExp(Drupal.t('Allowed HTML tags'));
+      if (expression.exec(element.textContent) && !element.textContent.match(/<img>/)) {
+        alert(Drupal.t("The selected text format will not allow it to display images. The text format will need to be changed for this image to display properly when saved."));
+      }
+    });
   },
 
   /**

@@ -8,8 +8,8 @@
 /**
  * Behavior to add "Insert" buttons.
  */
-Drupal.behaviors.insert = {};
-Drupal.behaviors.insert.attach = function(context) {
+Backdrop.behaviors.insert = {};
+Backdrop.behaviors.insert.attach = function(context) {
   if (typeof(insertTextarea) == 'undefined') {
     insertTextarea = $('#edit-body textarea.text-full').get(0) || false;
   }
@@ -36,7 +36,7 @@ Drupal.behaviors.insert.attach = function(context) {
 
   function insert() {
     var widgetType = $(this).attr('rel');
-    var settings = Drupal.settings.insert.widgets[widgetType];
+    var settings = Backdrop.settings.insert.widgets[widgetType];
     var wrapper = $(this).parents(settings.wrapper).filter(':first').get(0);
     var style = $('.insert-style', wrapper).val();
     var content = $('input.insert-template[name$="[' + style + ']"]', wrapper).val();
@@ -103,12 +103,12 @@ Drupal.behaviors.insert.attach = function(context) {
     });
 
     // Insert the text.
-    Drupal.insert.insertIntoActiveEditor(content);
+    Backdrop.insert.insertIntoActiveEditor(content);
   }
 };
 
 // General Insert API functions.
-Drupal.insert = {
+Backdrop.insert = {
   /**
    * Insert content into the current (or last active) editor on the page. This
    * should work with most WYSIWYGs as well as plain textareas.
@@ -121,24 +121,24 @@ Drupal.insert = {
     // Always work in normal text areas that currently have focus.
     if (insertTextarea && insertTextarea.insertHasFocus) {
       editorElement = insertTextarea;
-      Drupal.insert.insertAtCursor(insertTextarea, content);
+      Backdrop.insert.insertAtCursor(insertTextarea, content);
     }
     // Direct tinyMCE support.
     else if (typeof(tinyMCE) != 'undefined' && tinyMCE.activeEditor) {
       editorElement = document.getElementById(tinyMCE.activeEditor.editorId);
-      Drupal.insert.activateTabPane(editorElement);
+      Backdrop.insert.activateTabPane(editorElement);
       tinyMCE.activeEditor.execCommand('mceInsertContent', false, content);
     }
     // WYSIWYG support, should work in all editors if available.
-    else if (Drupal.wysiwyg && Drupal.wysiwyg.activeId) {
-      editorElement = document.getElementById(Drupal.wysiwyg.activeId);
-      Drupal.insert.activateTabPane(editorElement);
-      Drupal.wysiwyg.instances[Drupal.wysiwyg.activeId].insert(content)
+    else if (Backdrop.wysiwyg && Backdrop.wysiwyg.activeId) {
+      editorElement = document.getElementById(Backdrop.wysiwyg.activeId);
+      Backdrop.insert.activateTabPane(editorElement);
+      Backdrop.wysiwyg.instances[Backdrop.wysiwyg.activeId].insert(content)
     }
     // FCKeditor module support.
     else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
       editorElement = document.getElementById(fckActiveId);
-      Drupal.insert.activateTabPane(editorElement);
+      Backdrop.insert.activateTabPane(editorElement);
       FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
     }
     // Direct FCKeditor support (only body field supported).
@@ -146,7 +146,7 @@ Drupal.insert = {
       // Try inserting into the body.
       if (FCKeditorAPI.Instances[insertTextarea.id]) {
         editorElement = insertTextarea;
-        Drupal.insert.activateTabPane(editorElement);
+        Backdrop.insert.activateTabPane(editorElement);
         FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
       }
       // Try inserting into the first instance we find (may occur with very
@@ -154,32 +154,32 @@ Drupal.insert = {
       else {
         for (var n in FCKeditorAPI.Instances) {
           editorElement = document.getElementById(n);
-          Drupal.insert.activateTabPane(editorElement);
+          Backdrop.insert.activateTabPane(editorElement);
           FCKeditorAPI.Instances[n].InsertHtml(content);
           break;
         }
       }
     }
     // CKeditor module support.
-    else if (typeof(CKEDITOR) != 'undefined' && typeof(Drupal.ckeditorActiveId) != 'undefined') {
-      editorElement = document.getElementById(Drupal.ckeditorActiveId);
-      Drupal.insert.activateTabPane(editorElement);
-      CKEDITOR.instances[Drupal.ckeditorActiveId].insertHtml(content);
+    else if (typeof(CKEDITOR) != 'undefined' && typeof(Backdrop.ckeditorActiveId) != 'undefined') {
+      editorElement = document.getElementById(Backdrop.ckeditorActiveId);
+      Backdrop.insert.activateTabPane(editorElement);
+      CKEDITOR.instances[Backdrop.ckeditorActiveId].insertHtml(content);
     }
     // Direct CKeditor support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
       editorElement = insertTextarea;
-      Drupal.insert.activateTabPane(editorElement);
+      Backdrop.insert.activateTabPane(editorElement);
       CKEDITOR.instances[insertTextarea.id].insertHtml(content);
     }
     else if (insertTextarea) {
       editorElement = insertTextarea;
-      Drupal.insert.activateTabPane(editorElement);
-      Drupal.insert.insertAtCursor(insertTextarea, content);
+      Backdrop.insert.activateTabPane(editorElement);
+      Backdrop.insert.insertAtCursor(insertTextarea, content);
     }
 
     if (editorElement) {
-      Drupal.insert.contentWarning(editorElement, content);
+      Backdrop.insert.contentWarning(editorElement, content);
     }
 
     return false;
@@ -215,9 +215,9 @@ Drupal.insert = {
     if (!$wrapper.length) return;
 
     $wrapper.find('.filter-guidelines-item:visible li').each(function(index, element) {
-      var expression = new RegExp(Drupal.t('Allowed HTML tags'));
+      var expression = new RegExp(Backdrop.t('Allowed HTML tags'));
       if (expression.exec(element.textContent) && !element.textContent.match(/<img>/)) {
-        alert(Drupal.t("The selected text format will not allow it to display images. The text format will need to be changed for this image to display properly when saved."));
+        alert(Backdrop.t("The selected text format will not allow it to display images. The text format will need to be changed for this image to display properly when saved."));
       }
     });
   },

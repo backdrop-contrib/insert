@@ -12,3 +12,28 @@ function insert_install() {
   // Insert needs to load after both ImageField and FileField.
   db_query("UPDATE {system} SET weight = 15 WHERE type = 'module' AND name = 'insert'");
 }
+
+/**
+ * @defgroup updates-7.x-to-1.x Updates from 7.x to 1.x
+ * @{
+ * Update functions from Drupal 7.x to Backdrop CMS 1.x.
+ */
+
+/**
+ * Move insert settings from variables to config.
+ */
+function insert_update_1000() {
+  // Migrate variables to config.
+  $config = config('insert.settings');
+  $config->set('absolute_paths', update_variable_get('insert_absolute_paths', FALSE));
+
+  $config->save();
+
+  // Delete variables.
+  update_variable_del('insert_absolute_paths');
+}
+
+/**
+ * @} End of "defgroup updates-7.x-to-1.x"
+ * The next series of updates should start at 2000.
+ */

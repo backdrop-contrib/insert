@@ -12,6 +12,17 @@ require dirname(__FILE__) . '/includes/image.inc';
 require dirname(__FILE__) . '/includes/insert.inc';
 
 /**
+* Implements hook_config_info().
+*/
+function insert_config_info() {
+  $prefixes['insert.settings'] = array(
+    'label' => t('Settings'),
+    'group' => t('Insert'),
+  );
+  return $prefixes;
+}
+
+/**
  * Implements hook_element_info().
  */
 function insert_element_info() {
@@ -82,7 +93,7 @@ function insert_styles($reset = FALSE) {
       }
       $styles = array_merge($styles, $module_styles);
     }
-    drupal_alter('insert_styles', $styles);
+    backdrop_alter('insert_styles', $styles);
     uasort($styles, '_insert_style_sort');
   }
 
@@ -133,7 +144,7 @@ function insert_widgets($reset = FALSE) {
       }
       $widgets = array_merge($widgets, $module_widgets);
     }
-    drupal_alter('insert_widgets', $widgets);
+    backdrop_alter('insert_widgets', $widgets);
   }
 
   return $widgets;
@@ -182,8 +193,8 @@ function insert_element_process($element) {
   if (!isset($js_added)) {
     $js_added = array();
     $settings = array('fileDirectoryPath' => file_default_scheme());
-    drupal_add_js(array('insert' => $settings), 'setting');
-    drupal_add_js(drupal_get_path('module', 'insert') . '/insert.js');
+    backdrop_add_js(array('insert' => $settings), 'setting');
+    backdrop_add_js(backdrop_get_path('module', 'insert') . '/insert.js');
   }
 
   // Add settings for this widget only once.
@@ -195,7 +206,7 @@ function insert_element_process($element) {
       'wrapper' => $insert_widget['wrapper'],
       'fields' => $insert_widget['fields'],
     );
-    drupal_add_js(array('insert' => array('widgets' => array($widget_type => $insert_settings))), 'setting');
+    backdrop_add_js(array('insert' => array('widgets' => array($widget_type => $insert_settings))), 'setting');
   }
 
   // Load the file if it's not entirely loaded.
@@ -206,7 +217,7 @@ function insert_element_process($element) {
   }
 
   if (isset($item['filename'])) {
-    $insert_styles = !empty($widget_settings['insert_styles']['<all>']) ? drupal_map_assoc(array_keys(insert_styles())) : array_filter((array) $widget_settings['insert_styles']);
+    $insert_styles = !empty($widget_settings['insert_styles']['<all>']) ? backdrop_map_assoc(array_keys(insert_styles())) : array_filter((array) $widget_settings['insert_styles']);
     $default = !empty($instance['widget']['settings']['insert_default']) ? $widget_settings['insert_default'] : 'auto';
     if (!isset($insert_styles[$default])) {
       $insert_styles[$default] = $default;
@@ -268,7 +279,7 @@ function insert_form_field_ui_field_edit_form_alter(&$form, $form_state) {
 function insert_field_widget_info_alter(&$info) {
   $settings = array(
     'insert' => 0,
-    'insert_absolute' => variable_get('insert_absolute_paths', FALSE),
+    'insert_absolute' => config_get('insert.settings', 'absolute_paths'),
     'insert_styles' => array('auto'),
     'insert_default' => array('auto'),
     'insert_class' => '',
@@ -310,7 +321,7 @@ function insert_field_widget_settings_form($field, $instance) {
   $form['insert']['insert_absolute'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use absolute paths'),
-    '#default_value' => isset($settings['insert_absolute']) ? $settings['insert_absolute'] : variable_get('insert_absolute_paths', FALSE),
+    '#default_value' => isset($settings['insert_absolute']) ? $settings['insert_absolute'] : config_get('insert.settings', 'absolute_paths'),
     '#description' => t('Includes the full URL prefix "@base_url" in all links and image tags.', array('@base_url' => $GLOBALS['base_url'])),
     '#weight' => -9,
   );
@@ -370,7 +381,7 @@ function insert_field_widget_settings_styles_validate($element, &$form_state) {
  */
 function theme_insert_field_widget_settings_styles($variables) {
   $element = $variables['element'];
-  drupal_add_js('misc/tableselect.js');
+  backdrop_add_js('misc/tableselect.js');
 
   $header = array(
     array('class' => array('select-all'), 'data' => ' ' . t('Select all')),
@@ -379,7 +390,7 @@ function theme_insert_field_widget_settings_styles($variables) {
   $rows = array();
   foreach ($element['#options'] as $key => $label) {
     $row = array();
-    $row[] = drupal_render($element[$key]);
+    $row[] = backdrop_render($element[$key]);
     $rows[] = $row;
   }
   return theme('table', array('header' => $header, 'rows' => $rows));
@@ -393,7 +404,7 @@ function theme_insert_field_widget_settings_styles($variables) {
  * setting.
  */
 function insert_create_url($uri, $absolute = NULL, $clean_urls = TRUE) {
-  $absolute = isset($absolute) ? $absolute : variable_get('insert_absolute_paths', FALSE);
+  $absolute = isset($absolute) ? $absolute : config_get('insert.settings', 'absolute_paths');
 
   // If not using clean URLs, the image derivative callback is only available
   // with the query string. Always use the non-clean URL in the event that the

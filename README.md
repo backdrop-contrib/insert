@@ -54,7 +54,7 @@ complete text.
 Current Maintainers
 -------------------
 
-This module is currently maintained by Nate Haug.
+Currently seeking maintainers.
 
 Credits
 -------

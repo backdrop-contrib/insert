@@ -381,7 +381,7 @@ function insert_field_widget_settings_styles_validate($element, &$form_state) {
  */
 function theme_insert_field_widget_settings_styles($variables) {
   $element = $variables['element'];
-  backdrop_add_js('misc/tableselect.js');
+  backdrop_add_js('core/misc/tableselect.js');
 
   $header = array(
     array('class' => array('select-all'), 'data' => ' ' . t('Select all')),

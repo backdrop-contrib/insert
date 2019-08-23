@@ -1,39 +1,26 @@
 <?php
-
 /**
  * @file
- * Update and install functions for Insert.
+ * Install, update, and uninstall functions for the Insert module.
  */
 
 /**
- * Implementation of hook_install().
+ * Implements hook_install().
  */
 function insert_install() {
-  // Insert needs to load after both ImageField and FileField.
-  db_query("UPDATE {system} SET weight = 15 WHERE type = 'module' AND name = 'insert'");
+  // Insert needs to load after both the Image and File modules.
+  db_update('system')
+    ->fields(array('weight' => 5))
+    ->condition('type', 'module')
+    ->condition('name', 'insert')
+    ->execute();
 }
 
 /**
- * @defgroup updates-7.x-to-1.x Updates from 7.x to 1.x
- * @{
- * Update functions from Drupal 7.x to Backdrop CMS 1.x.
- */
-
-/**
- * Move insert settings from variables to config.
+ * Migrate Insert settings from variables to config.
  */
 function insert_update_1000() {
-  // Migrate variables to config.
-  $config = config('insert.settings');
-  $config->set('absolute_paths', update_variable_get('insert_absolute_paths', FALSE));
-
-  $config->save();
-
-  // Delete variables.
+  config_set('insert.settings', 'absolute_paths', update_variable_get('insert_absolute_paths', FALSE));
   update_variable_del('insert_absolute_paths');
 }
 
-/**
- * @} End of "defgroup updates-7.x-to-1.x"
- * The next series of updates should start at 2000.
- */

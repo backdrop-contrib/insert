@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Allows insertion of files, images, and other media directly into the body
@@ -7,13 +6,13 @@
  */
 
 // Load default implementations of insert hooks for core modules.
-require dirname(__FILE__) . '/includes/file.inc';
-require dirname(__FILE__) . '/includes/image.inc';
-require dirname(__FILE__) . '/includes/insert.inc';
+require_once dirname(__FILE__) . '/includes/file.inc';
+require_once dirname(__FILE__) . '/includes/image.inc';
+require_once dirname(__FILE__) . '/includes/insert.inc';
 
 /**
-* Implements hook_config_info().
-*/
+ * Implements hook_config_info().
+ */
 function insert_config_info() {
   $prefixes['insert.settings'] = array(
     'label' => t('Settings'),

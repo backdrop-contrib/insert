@@ -95,7 +95,7 @@ Backdrop.behaviors.insert.attach = function(context) {
     content = options['content'];
 
     // Cleanup unused replacements.
-    content = content.replace(/"__([a-z0-9_]+)__"/g, '""');
+    content = content.replace(/__([a-z0-9_]+)__/g, '');
 
     // Cleanup empty attributes (other than alt).
     content = content.replace(/([a-z]+)[ ]*=[ ]*""/g, function(match, tagName) {

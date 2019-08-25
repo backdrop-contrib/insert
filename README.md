@@ -54,7 +54,7 @@ complete text.
 Current Maintainers
 -------------------
 
-Currently seeking maintainers.
+Peter Anderson (https://github.com/BWPanda)
 
 Credits
 -------

@@ -1,55 +1,50 @@
 Insert
-========
+======
 
-Insert is a utility that makes inserting images and links to files into text areas or WYSIWYGs much easier. It adds a simple JavaScript-based button to File and Image fields. Images may be inserted into text areas with a specific Image style.
+Insert is a utility that makes inserting images and links to files into
+textareas or WYSIWYGs much easier. It adds a simple JavaScript-based button to
+File and Image fields. Images may be inserted into textareas with a specific
+image style.
 
-Dependencies
+Installation
 ------------
 
-Insert module does not have any dependencies, but it won't do anything unless
-you have at least one File or Image field configured on your site. Both of
-these fields are provided by Drupal core.
+1. Install this module using the official Backdrop CMS instructions at
+   https://backdropcms.org/guide/modules.
 
-INSTALLATION
-------------
+1. If planning to use Insert with Images, make sure the core Image module is
+   enabled.
 
-1) Copy the insert folder to the modules folder in your installation. Usually
-   this is modules.
+1. Add or configure a File or Image field under Administer > Structure > Content
+   types > [TYPE] > Manage fields (admin/structure/types/manage/[type]/fields).
+   When configuring a field, there is a new section in the Field options for
+   "Insert". You can then configure the field to include an Insert button and
+   choose what templates you would like to have.
 
-2) In your Backdrop site, enable the module under Functionality -> Modules
-   (/admin/modules).
-
-3) Add or configure a File or Image field under Administer -> Structure ->
-   Content types -> [type] -> Manage Fields
-   (admin/structure/types/manage/[type]/fields). Once configuring a field,
-   there is a new section in the Field options for "Insert". You can then
-   configure the field to include an Insert button and what templates you would
-   like to have.
-
-4) Create a piece of content with the configured field. After uploading a file,
+1. Create a piece of content with the configured field. After uploading a file,
    an "Insert" button will appear. Click this button to send the file or image
    into the Body field.
 
-Insert should work on multiple fields (the last field that was active will
-receive the file), and with most popular WYSIWYG editors.
+   Insert should work on multiple fields (the last field that was active will
+   receive the file), and with most popular WYSIWYG editors.
 
 Theming
 -------
 
 Insert can be configured to work with non-HTML filters like BBCode or Markdown.
 To do this, copy the template file you would like to change from the "templates"
-directory to your active theme's directory. Then empty your Backdrop caches.
+directory to your active theme's directory. Then clear your caches.
 
 The Image templates may also be used per Image style. You can copy the
-image-insert-image.tpl.php file to your theme directory and then rename it to
-image-insert-image--[style-name].tpl.php, where [style-name] is the name of the
-Image style. Change underscores to hyphens in the style name.
+`image-insert-image.tpl.php` file to your theme directory and then rename it to
+`image-insert-image--[style-name].tpl.php`, where `[style-name]` is the name of
+the Image style. Change underscores to hyphens in the style name.
 
-License
--------
+Issues
+------
 
-This project is GPL v2 software. See the LICENSE.txt file in this directory for
-complete text.
+Bugs and Feature requests should be reported in the Issue Queue:
+https://github.com/backdrop-contrib/insert/issues.
 
 Current Maintainers
 -------------------
@@ -59,8 +54,12 @@ Peter Anderson (https://github.com/BWPanda)
 Credits
 -------
 
-Ported to Backdrop by Herb v/d Dool (https://github.com/herbdool/)
+- Ported to Backdrop by Herb v/d Dool (https://github.com/herbdool).
+- Originally written for Drupal by Nate Haug (https://github.com/quicksketch).
 
-This module was originally written for Drupal by Nate Haug (https://drupal.org/project/insert).
+License
+-------
 
-This Module Made by Robots: http://www.lullabot.com
+This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.
+

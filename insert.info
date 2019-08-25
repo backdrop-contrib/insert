@@ -2,4 +2,4 @@ name = Insert
 description = Assists in inserting files, images, or other media into the body field or other text areas.
 backdrop = 1.x
 type = module
-version = 1.x-1.x
+

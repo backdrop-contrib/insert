@@ -63,7 +63,7 @@ function template_preprocess_image_insert_image(&$vars) {
   // http://drupal.org/node/1923336
   if (function_exists('image_style_path_token')) {
     $token_query = array(IMAGE_DERIVATIVE_TOKEN => image_style_path_token($vars['style_name'], $vars['file']->uri));
-    $vars['url'] .= (strpos($vars['url'], '?') !== FALSE ? '&' : '?') . drupal_http_build_query($token_query);
+    $vars['url'] .= (strpos($vars['url'], '?') !== FALSE ? '&' : '?') . backdrop_http_build_query($token_query);
   }
 
   $vars['class'] = !empty($vars['widget']['settings']['insert_class']) ? $vars['widget']['settings']['insert_class'] : '';

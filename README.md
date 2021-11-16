@@ -49,7 +49,7 @@ https://github.com/backdrop-contrib/insert/issues.
 Current Maintainers
 -------------------
 
-Peter Anderson (https://github.com/BWPanda)
+...
 
 Credits
 -------

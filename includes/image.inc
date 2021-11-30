@@ -61,7 +61,7 @@ function template_preprocess_image_insert_image(&$vars) {
   $vars['url'] = insert_create_url($vars['uri'], $absolute, variable_get('clean_url'));
 
   if (function_exists('image_style_path_token')) {
-    $token_query = array(IMAGE_DERIVATIVE_TOKEN => image_style_path_token($vars['style_name'], $vars['file']->uri));
+    $token_query = array('IMAGE_DERIVATIVE_TOKEN' => image_style_path_token($vars['style_name'], $vars['file']->uri));
     $vars['url'] .= (strpos($vars['url'], '?') !== FALSE ? '&' : '?') . backdrop_http_build_query($token_query);
   }
 

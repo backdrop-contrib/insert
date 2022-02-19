@@ -11,6 +11,30 @@ require_once dirname(__FILE__) . '/includes/image.inc';
 require_once dirname(__FILE__) . '/includes/insert.inc';
 
 /**
+ * Implements hook_menu().
+ */
+function insert_menu() {
+  // A page in the Reports section to show usage of insert in all fields
+  if (module_exists('field_ui')) {
+    $items['admin/reports/fields/list'] = array(
+      'title' => 'List fields',
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'weight' => -10,
+    );
+    $items['admin/reports/fields/insert'] = array(
+      'title' => 'Insert presets',
+      'description' => 'Insert presets enabled.',
+      'page callback' => 'insert_fields_list',
+      'access arguments' => array('administer content types'),
+      'type' => MENU_LOCAL_TASK,
+      'weight' => 1,
+      'file' => 'insert.admin.inc',
+    );
+  }
+  return $items;
+}
+
+/**
  * Implements hook_config_info().
  */
 function insert_config_info() {

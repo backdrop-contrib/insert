@@ -49,7 +49,7 @@ https://github.com/backdrop-contrib/insert/issues.
 Current Maintainers
 -------------------
 
-...
+John Romine (https://github.com/jromine)
 
 Credits
 -------

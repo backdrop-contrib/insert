@@ -195,7 +195,7 @@ Backdrop.insert = {
     var $pane = $(editor).parents('.vertical-tabs-pane:first');
     var $panes = $pane.parent('.vertical-tabs-panes');
     var $tabs = $panes.parents('.vertical-tabs:first').find('ul.vertical-tabs-list:first li a');
-    if ($pane.size() && $pane.is(':hidden') && $panes.size() && $tabs.size()) {
+    if ($pane.length && $pane.is(':hidden') && $panes.length && $tabs.length) {
       var index = $panes.children().index($pane);
       $tabs.eq(index).click();
     }

@@ -49,13 +49,14 @@ https://github.com/backdrop-contrib/insert/issues.
 Current Maintainers
 -------------------
 
-John Romine (https://github.com/jromine)
+- John Romine (https://github.com/jromine)
+- Nate Lampton (https://github.com/quicksketch)
 
 Credits
 -------
 
-- Ported to Backdrop by Herb v/d Dool (https://github.com/herbdool).
-- Originally written for Drupal by Nate Haug (https://github.com/quicksketch).
+- Ported to Backdrop by Herb v/d Dool (https://github.com/herbdool)
+- Originally written for Drupal by Nate Lampton (https://github.com/quicksketch)
 
 License
 -------

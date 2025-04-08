@@ -132,12 +132,19 @@ Backdrop.insert = {
     // CKEditor 5 module support.
     // See https://ckeditor.com/docs/ckeditor5/latest/framework/how-tos.html#how-to-insert-some-content-into-the-editor
     else if (Backdrop.ckeditor5 && Backdrop.ckeditor5.activeEditor) {
-      var insertCKEditor = Backdrop.ckeditor5.activeEditor;
-      Backdrop.insert.activateTabPane(insertCKEditor.sourceElement);
-      var insertPosition = insertCKEditor.model.document.selection.getFirstPosition();
-      var viewFragment = insertCKEditor.data.processor.toView(content);
-      var modelFragment = insertCKEditor.data.toModel(viewFragment);
-      insertCKEditor.model.insertContent(modelFragment, insertPosition);
+      var ckeditorInstance = Backdrop.ckeditor5.activeEditor;
+      Backdrop.insert.activateTabPane(ckeditorInstance.sourceElement);
+      var ckeditorSelection = ckeditorInstance.model.document.selection;
+      // CKEditor will wrap every inserted child element in a paragraph if it is
+      // inserted into the editor root. Wrap the inserted content in a paragraph
+      // when this happens. CKEditor prevents nested paragraph tags if needed.
+      var selectedElement = ckeditorSelection.getFirstPosition().parent;
+      if (selectedElement.is('element', 'paragraph')) {
+        content = '<p>' + content + '</p>';
+      }
+      var viewFragment = ckeditorInstance.data.processor.toView(content);
+      var modelFragment = ckeditorInstance.data.toModel(viewFragment);
+      ckeditorInstance.model.insertContent(modelFragment, ckeditorSelection);
     }
     // Direct CKEditor 4 support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {

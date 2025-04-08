@@ -20,29 +20,6 @@ Backdrop.behaviors.insert.attach = function(context) {
   // Add the click handler to the insert button.
   $('.insert-button:not(.insert-processed)', context).addClass('insert-processed').click(insert);
 
-  // CKEditor 5 does not keep track of the last active editor.
-  // See https://github.com/backdrop/backdrop-issues/issues/6770
-  // Keep track of the last-focused CKEditor 5 instance.
-  if (typeof(insertCKEditor) === 'undefined') {
-    insertCKEditor = false;
-  }
-  if (typeof(Backdrop.ckeditor5) !== 'undefined') {
-    // We need to wait until the CKEditor instance is created. A basic timeout
-    // is used here, but it's not guaranteed the instance will exist yet.
-    window.setTimeout(function() {
-      Backdrop.ckeditor5.instances.forEach(function (editor, editorId) {
-        if (!editor.insertEnabled) {
-          editor.insertEnabled = true;
-          editor.editing.view.document.on('change:isFocused', function (evt, data, isFocused) {
-            if (isFocused) {
-              insertCKEditor = editor;
-            }
-          });
-        }
-      });
-    }, 2000);
-  }
-
   function insertSetActive() {
     insertTextarea = this;
     this.insertHasFocus = true;
@@ -154,7 +131,8 @@ Backdrop.insert = {
     }
     // CKEditor 5 module support.
     // See https://ckeditor.com/docs/ckeditor5/latest/framework/how-tos.html#how-to-insert-some-content-into-the-editor
-    else if (insertCKEditor && insertCKEditor.sourceElement) {
+    else if (Backdrop.ckeditor5 && Backdrop.ckeditor5.activeEditor) {
+      var insertCKEditor = Backdrop.ckeditor5.activeEditor;
       Backdrop.insert.activateTabPane(insertCKEditor.sourceElement);
       var insertPosition = insertCKEditor.model.document.selection.getFirstPosition();
       var viewFragment = insertCKEditor.data.processor.toView(content);

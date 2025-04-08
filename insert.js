@@ -129,44 +129,24 @@ Backdrop.insert = {
       Backdrop.insert.activateTabPane(editorElement);
       tinyMCE.activeEditor.execCommand('mceInsertContent', false, content);
     }
-    // WYSIWYG support, should work in all editors if available.
-    else if (Backdrop.wysiwyg && Backdrop.wysiwyg.activeId) {
-      editorElement = document.getElementById(Backdrop.wysiwyg.activeId);
-      Backdrop.insert.activateTabPane(editorElement);
-      Backdrop.wysiwyg.instances[Backdrop.wysiwyg.activeId].insert(content)
-    }
-    // FCKeditor module support.
-    else if (typeof(FCKeditorAPI) != 'undefined' && typeof(fckActiveId) != 'undefined') {
-      editorElement = document.getElementById(fckActiveId);
-      Backdrop.insert.activateTabPane(editorElement);
-      FCKeditorAPI.Instances[fckActiveId].InsertHtml(content);
-    }
-    // Direct FCKeditor support (only body field supported).
-    else if (typeof(FCKeditorAPI) != 'undefined') {
-      // Try inserting into the body.
-      if (FCKeditorAPI.Instances[insertTextarea.id]) {
-        editorElement = insertTextarea;
-        Backdrop.insert.activateTabPane(editorElement);
-        FCKeditorAPI.Instances[insertTextarea.id].InsertHtml(content);
+    // CKEditor 5 module support.
+    // See https://ckeditor.com/docs/ckeditor5/latest/framework/how-tos.html#how-to-insert-some-content-into-the-editor
+    else if (Backdrop.ckeditor5 && Backdrop.ckeditor5.activeEditor) {
+      var ckeditorInstance = Backdrop.ckeditor5.activeEditor;
+      Backdrop.insert.activateTabPane(ckeditorInstance.sourceElement);
+      var ckeditorSelection = ckeditorInstance.model.document.selection;
+      // CKEditor will wrap every inserted child element in a paragraph if it is
+      // inserted into the editor root. Wrap the inserted content in a paragraph
+      // when this happens. CKEditor prevents nested paragraph tags if needed.
+      var selectedElement = ckeditorSelection.getFirstPosition().parent;
+      if (selectedElement.is('element', 'paragraph')) {
+        content = '<p>' + content + '</p>';
       }
-      // Try inserting into the first instance we find (may occur with very
-      // old versions of FCKeditor).
-      else {
-        for (var n in FCKeditorAPI.Instances) {
-          editorElement = document.getElementById(n);
-          Backdrop.insert.activateTabPane(editorElement);
-          FCKeditorAPI.Instances[n].InsertHtml(content);
-          break;
-        }
-      }
+      var viewFragment = ckeditorInstance.data.processor.toView(content);
+      var modelFragment = ckeditorInstance.data.toModel(viewFragment);
+      ckeditorInstance.model.insertContent(modelFragment, ckeditorSelection);
     }
-    // CKeditor module support.
-    else if (typeof(CKEDITOR) != 'undefined' && typeof(Backdrop.ckeditorActiveId) != 'undefined') {
-      editorElement = document.getElementById(Backdrop.ckeditorActiveId);
-      Backdrop.insert.activateTabPane(editorElement);
-      CKEDITOR.instances[Backdrop.ckeditorActiveId].insertHtml(content);
-    }
-    // Direct CKeditor support (only body field supported).
+    // Direct CKEditor 4 support (only body field supported).
     else if (typeof(CKEDITOR) != 'undefined' && CKEDITOR.instances[insertTextarea.id]) {
       editorElement = insertTextarea;
       Backdrop.insert.activateTabPane(editorElement);
